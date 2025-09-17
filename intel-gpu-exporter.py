@@ -255,36 +255,62 @@ async def process_gpu_output(cmd_parts, logger):
         return
 
     logger.info(f"Started command: {' '.join(cmd_parts)}")
+    decoder = json.JSONDecoder()
+    buffer = ""
 
     try:
-        # Process the stream line by line
-        async for line in process.stdout:
-            line = line.decode("utf-8").strip()
-            if line in ("[", "]", ","):
-                continue  # Skip JSON array delimiters
+        # Use `async for` for idiomatic stream processing
+        async for chunk in process.stdout:
+            buffer += chunk.decode("utf-8")
 
-            # Trim trailing comma if it exists
-            if line.endswith(","):
-                line = line[:-1]
+            # The inner loop is still necessary to parse all complete objects from the buffer
+            while True:
+                buffer = buffer.lstrip()
+                if not buffer:
+                    break  # Buffer is empty, need more data
 
-            try:
-                obj = json.loads(line)
-                logger.debug(f"Parsed data: {obj}")
-                update(obj)
-            except json.JSONDecodeError:
-                logger.warning(f"Skipping malformed JSON line: {line}")
-                continue
+                # Skip array start and separators
+                if buffer.startswith(("[", ",")):
+                    buffer = buffer[1:]
+                    continue
 
+                if buffer.startswith("{"):
+                    try:
+                        obj, idx = decoder.raw_decode(buffer)
+                        logger.debug(f"Parsed data: {obj}")
+                        update(obj)
+                        buffer = buffer[idx:]  # Move buffer past the parsed object
+                    except json.JSONDecodeError:
+                        # Incomplete JSON object, break to read more data
+                        break
+                else:
+                    # Handle unexpected data or end of array
+                    if not buffer.startswith("]"):
+                        logger.warning(f"Unexpected data in stream: {buffer[:50]}")
+
+                    # Attempt to recover by finding the next object
+                    next_obj_start = buffer.find("{")
+                    if next_obj_start != -1:
+                        buffer = buffer[next_obj_start:]
+                    else:
+                        buffer = ""  # Discard if no recovery point is found
+                    break
+
+    except asyncio.CancelledError:
+        logger.info("Stream processing was cancelled.")
     except Exception as e:
         logger.error(f"An unexpected error occurred while processing stream: {e}")
     finally:
         # Ensure the process is terminated
         if process.returncode is None:
-            process.kill()
-            await process.wait()
+            try:
+                process.kill()
+                await process.wait()
+            except ProcessLookupError:
+                pass  # Process already finished
 
         # Check for errors on exit
-        if process.returncode != 0 and not process.returncode in [-9, -15, 143]:
+        if process.returncode and process.returncode not in [0, -9, -15, 143]:
             stderr_output = await process.stderr.read()
             if stderr_output:
                 logger.error(
@@ -293,11 +319,10 @@ async def process_gpu_output(cmd_parts, logger):
         logger.info("Finished processing GPU output.")
 
 
-async def main():
+async def main(logger):
     """
     Main async function to set up and run the exporter.
     """
-    logger = get_logger()
     start_http_server(8080)
 
     period = os.getenv("REFRESH_PERIOD_MS", 1000)
@@ -311,11 +336,10 @@ async def main():
 
 
 if __name__ == "__main__":
+    logger = get_logger()
     try:
-        asyncio.run(main())
+        asyncio.run(main(logger))
     except KeyboardInterrupt:
-        pass
+        logger.info("Exporter stopped by user.")
     except Exception as e:
-        # Use a fallback logger if the main one fails
-        logging.basicConfig()
-        logging.getLogger().error(f"An unexpected error occurred in the main loop: {e}")
+        logger.error(f"An unexpected error occurred in the main loop: {e}", exc_info=True)

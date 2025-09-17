@@ -129,7 +129,7 @@ def update(data):
     igpu_engines_blitter_wait.set(
         data.get("engines", {}).get("Blitter", {}).get("wait", 0.0)
     )
-    igpu_engines_render_3d_busy.set(.
+    igpu_engines_render_3d_busy.set(
         data.get("engines", {}).get("Render/3D", {}).get("busy", 0.0)
     )
     igpu_engines_render_3d_sema.set(

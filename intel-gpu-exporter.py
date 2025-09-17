@@ -219,7 +219,7 @@ def update(data):
 
 
 if __name__ == "__main__":
-    if os.getenv("DEBUG", False):
+    if os.getenv("DEBUG", "") == "true":
         debug = logging.DEBUG
     else:
         debug = logging.INFO

@@ -1,8 +1,5 @@
 # intel-gpu-exporter
 
-> [!IMPORTANT]
-> I am no longer using this, and have no plans to continue support. Please consider forking if interested in using.
-
 Get metrics from Intel GPUs
 
 ## Deployment
@@ -30,42 +27,42 @@ services:
 ## Metrics
 
 ```bash
-# HELP igpu_engines_blitter_0_busy Blitter 0 busy utilisation %
-# TYPE igpu_engines_blitter_0_busy gauge
-igpu_engines_blitter_0_busy 0.0
-# HELP igpu_engines_blitter_0_sema Blitter 0 sema utilisation %
-# TYPE igpu_engines_blitter_0_sema gauge
-igpu_engines_blitter_0_sema 0.0
-# HELP igpu_engines_blitter_0_wait Blitter 0 wait utilisation %
-# TYPE igpu_engines_blitter_0_wait gauge
-igpu_engines_blitter_0_wait 0.0
-# HELP igpu_engines_render_3d_0_busy Render 3D 0 busy utilisation %
-# TYPE igpu_engines_render_3d_0_busy gauge
-igpu_engines_render_3d_0_busy 0.0
-# HELP igpu_engines_render_3d_0_sema Render 3D 0 sema utilisation %
-# TYPE igpu_engines_render_3d_0_sema gauge
-igpu_engines_render_3d_0_sema 0.0
-# HELP igpu_engines_render_3d_0_wait Render 3D 0 wait utilisation %
-# TYPE igpu_engines_render_3d_0_wait gauge
-igpu_engines_render_3d_0_wait 0.0
-# HELP igpu_engines_video_0_busy Video 0 busy utilisation %
-# TYPE igpu_engines_video_0_busy gauge
-igpu_engines_video_0_busy 0.0
-# HELP igpu_engines_video_0_sema Video 0 sema utilisation %
-# TYPE igpu_engines_video_0_sema gauge
-igpu_engines_video_0_sema 0.0
-# HELP igpu_engines_video_0_wait Video 0 wait utilisation %
-# TYPE igpu_engines_video_0_wait gauge
-igpu_engines_video_0_wait 0.0
-# HELP igpu_engines_video_enhance_0_busy Video Enhance 0 busy utilisation %
-# TYPE igpu_engines_video_enhance_0_busy gauge
-igpu_engines_video_enhance_0_busy 0.0
-# HELP igpu_engines_video_enhance_0_sema Video Enhance 0 sema utilisation %
-# TYPE igpu_engines_video_enhance_0_sema gauge
-igpu_engines_video_enhance_0_sema 0.0
-# HELP igpu_engines_video_enhance_0_wait Video Enhance 0 wait utilisation %
-# TYPE igpu_engines_video_enhance_0_wait gauge
-igpu_engines_video_enhance_0_wait 0.0
+# HELP igpu_engines_blitter_busy Blitter 0 busy utilisation %
+# TYPE igpu_engines_blitter_busy gauge
+igpu_engines_blitter_busy 0.0
+# HELP igpu_engines_blitter_sema Blitter 0 sema utilisation %
+# TYPE igpu_engines_blitter_sema gauge
+igpu_engines_blitter_sema 0.0
+# HELP igpu_engines_blitter_wait Blitter 0 wait utilisation %
+# TYPE igpu_engines_blitter_wait gauge
+igpu_engines_blitter_wait 0.0
+# HELP igpu_engines_render_3d_busy Render 3D 0 busy utilisation %
+# TYPE igpu_engines_render_3d_busy gauge
+igpu_engines_render_3d_busy 0.0
+# HELP igpu_engines_render_3d_sema Render 3D 0 sema utilisation %
+# TYPE igpu_engines_render_3d_sema gauge
+igpu_engines_render_3d_sema 0.0
+# HELP igpu_engines_render_3d_wait Render 3D 0 wait utilisation %
+# TYPE igpu_engines_render_3d_wait gauge
+igpu_engines_render_3d_wait 0.0
+# HELP igpu_engines_video_busy Video 0 busy utilisation %
+# TYPE igpu_engines_video_busy gauge
+igpu_engines_video_busy 0.0
+# HELP igpu_engines_video_sema Video 0 sema utilisation %
+# TYPE igpu_engines_video_sema gauge
+igpu_engines_video_sema 0.0
+# HELP igpu_engines_video_wait Video 0 wait utilisation %
+# TYPE igpu_engines_video_wait gauge
+igpu_engines_video_wait 0.0
+# HELP igpu_engines_video_enhance_busy Video Enhance 0 busy utilisation %
+# TYPE igpu_engines_video_enhance_busy gauge
+igpu_engines_video_enhance_busy 0.0
+# HELP igpu_engines_video_enhance_sema Video Enhance 0 sema utilisation %
+# TYPE igpu_engines_video_enhance_sema gauge
+igpu_engines_video_enhance_sema 0.0
+# HELP igpu_engines_video_enhance_wait Video Enhance 0 wait utilisation %
+# TYPE igpu_engines_video_enhance_wait gauge
+igpu_engines_video_enhance_wait 0.0
 # HELP igpu_frequency_actual Frequency actual MHz
 # TYPE igpu_frequency_actual gauge
 igpu_frequency_actual 0.0
